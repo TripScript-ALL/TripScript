@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+python-multipart
+pillow
+accelerate
+safetensors
+sentencepiece
+transformers>=5.0.0

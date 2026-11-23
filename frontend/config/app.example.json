@@ -1,0 +1,6 @@
+{
+  "API_BASE_URL": "http://127.0.0.1:8000/api/v1",
+  "KAKAO_NATIVE_APP_KEY": "",
+  "SKIP_LOGIN": false,
+  "ENABLE_LEGACY_LOGIN": false
+}

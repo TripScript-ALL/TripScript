@@ -1,0 +1,5 @@
+# Copy to local.properties and set your own SDK paths.
+# sdk.dir=C:/path/to/Android/Sdk
+# flutter.sdk=C:/path/to/flutter
+kakao.native.app.key=
+api.base.url=http://127.0.0.1:8000/api/v1

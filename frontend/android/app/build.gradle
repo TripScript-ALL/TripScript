@@ -1,0 +1,86 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader("UTF-8") { reader ->
+        localProperties.load(reader)
+    }
+}
+def kakaoNativeAppKey = localProperties.getProperty("kakao.native.app.key")
+if (kakaoNativeAppKey == null || kakaoNativeAppKey.isEmpty()) {
+    kakaoNativeAppKey = findProperty("KAKAO_NATIVE_APP_KEY") ?: System.getenv("KAKAO_NATIVE_APP_KEY") ?: ""
+}
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withReader("UTF-8") { reader ->
+        keystoreProperties.load(reader)
+    }
+}
+def hasReleaseKeystore = keystorePropertiesFile.exists() &&
+        keystoreProperties["storeFile"] &&
+        keystoreProperties["storePassword"] &&
+        keystoreProperties["keyAlias"] &&
+        keystoreProperties["keyPassword"]
+
+android {
+    namespace = "com.receiptocr.receiptocr"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = "25.1.8937393"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId = "com.receiptocr.receiptocr"
+        // You can update the following values to match your application needs.
+        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        minSdk = flutter.minSdkVersion
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+        manifestPlaceholders += [KAKAO_NATIVE_APP_KEY: kakaoNativeAppKey]
+    }
+
+    signingConfigs {
+        if (hasReleaseKeystore) {
+            release {
+                storeFile = rootProject.file(keystoreProperties["storeFile"])
+                storePassword = keystoreProperties["storePassword"]
+                keyAlias = keystoreProperties["keyAlias"]
+                keyPassword = keystoreProperties["keyPassword"]
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig = hasReleaseKeystore ? signingConfigs.release : signingConfigs.debug
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+}
+
+flutter {
+    source = "../.."
+}
+
+tasks.matching { it.name == "checkDebugAarMetadata" }.configureEach {
+    enabled = false
+}

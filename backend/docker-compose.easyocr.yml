@@ -1,0 +1,18 @@
+services:
+  api:
+    depends_on:
+      - easyocr
+
+  easyocr:
+    build:
+      context: .
+      dockerfile: services/easyocr_service/Dockerfile
+    container_name: tripscript-easyocr
+    ports:
+      - "127.0.0.1:8011:8011"
+    volumes:
+      - easyocr-models:/models/easyocr
+    restart: unless-stopped
+
+volumes:
+  easyocr-models:

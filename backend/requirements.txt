@@ -1,0 +1,17 @@
+fastapi
+uvicorn[standard]
+pydantic-settings
+sqlalchemy
+pymysql
+alembic
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+httpx
+opencv-python-headless
+python-dotenv
+redis
+rq
+minio
+pytest
+pytest-asyncio

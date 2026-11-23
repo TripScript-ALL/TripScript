@@ -1,0 +1,12 @@
+services:
+  admin:
+    build:
+      context: ${ADMIN_WEB_CONTEXT:-./admin_web}
+      args:
+        VITE_API_BASE_URL: ${ADMIN_VITE_API_BASE_URL:-http://127.0.0.1:8000/api/v1}
+    container_name: tripscript-admin-web
+    ports:
+      - "127.0.0.1:${ADMIN_WEB_PORT:-8080}:80"
+    depends_on:
+      - api
+    restart: unless-stopped
